@@ -14,6 +14,7 @@ A Dockerized Flask + Streamlit app to fetch and analyze your liked tweets.
 
 ```bash
 docker compose up --build
+```
 
 Workflow
 
