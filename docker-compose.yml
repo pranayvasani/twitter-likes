@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  twitter-likes:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    command: python app.py
+
+  fetcher:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    depends_on:
+      - twitter-likes
+    # don't start immediately; the entrypoint script waits for tokens.json
+    command: python fetch_runner.py
+
+  dashboard:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    ports:
+      - "8501:8501"
+    command: streamlit run dashboard.py --server.port 8501 --server.address 0.0.0.0
